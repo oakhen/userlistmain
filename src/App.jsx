@@ -29,7 +29,10 @@ function App() {
   }
 
   const handleDelete = (id) => {
-    setUserList(userList.filter((user) => user.id !== id))
+    const confirmBox = window.confirm("Do you Really want to delete this user?")
+    if (confirmBox) {
+      setUserList(userList.filter((user) => user.id !== id))
+    }
   }
 
   const handleAdd = (text, email) => {
@@ -56,7 +59,7 @@ function App() {
     localStorage.setItem("userList", JSON.stringify(userList))
   }, [userList])
   return (
-    <div>
+    <div className="main">
       <UseInput addUser={handleAdd} update={update} updatUser={handleUpdate} />
       <UserList user={userList} deleteUser={handleDelete} edit={handleEdit} />
     </div>

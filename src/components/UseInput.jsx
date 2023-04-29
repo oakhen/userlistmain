@@ -1,9 +1,25 @@
 import { useEffect, useState } from "react"
+
+import { FaCheck } from "react-icons/fa"
 // import { v4 as uid } from "uuid"
 
 function UseInput({ addUser, updatUser, update }) {
   const [text, setText] = useState("")
   const [email, setEmail] = useState("")
+  const [msg, setMsg] = useState({
+    display: false,
+    msg: "",
+  })
+
+  const messages = (msg) => {
+    setMsg({
+      display: true,
+      msg: msg,
+    })
+    setTimeout(() => {
+      setMsg({ display: false })
+    }, 2000)
+  }
 
   useEffect(() => {
     if (update.edit) {
@@ -11,8 +27,10 @@ function UseInput({ addUser, updatUser, update }) {
       setEmail(update.user.email)
     }
   }, [update])
+
   return (
     <div className="card">
+      <h1>Enter User Details</h1>
       <form
         onSubmit={(e) => {
           e.preventDefault()
@@ -23,10 +41,12 @@ function UseInput({ addUser, updatUser, update }) {
             updatUser(update.user.id, text, email)
             setText("")
             setEmail("")
+            messages("User details have been updated")
           } else {
             addUser(text, email)
             setText("")
             setEmail("")
+            messages("User details have been saved!")
           }
         }}
       >
@@ -53,8 +73,11 @@ function UseInput({ addUser, updatUser, update }) {
           />
         </div>
 
-        <button type="submit">submit</button>
+        <button className="btn" type="submit">
+          submit
+        </button>
         <button
+          className="btn"
           onClick={() => {
             setText("")
             setEmail("")
@@ -64,6 +87,16 @@ function UseInput({ addUser, updatUser, update }) {
           reset
         </button>
       </form>
+
+      {msg.display && (
+        <p
+          style={{
+            color: "green",
+          }}
+        >
+          <FaCheck color="green" /> {msg.msg}
+        </p>
+      )}
     </div>
   )
 }
