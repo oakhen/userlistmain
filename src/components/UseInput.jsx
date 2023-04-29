@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react"
 // import { v4 as uid } from "uuid"
 
-function UseInput({ addUser, updatUser }) {
+function UseInput({ addUser, updatUser, update }) {
   const [text, setText] = useState("")
   const [email, setEmail] = useState("")
 
+  useEffect(() => {
+    if (update.edit) {
+      setText(update.user.text)
+      setEmail(update.user.email)
+    }
+  }, [update])
   return (
     <div className="card">
       <form
@@ -12,17 +18,13 @@ function UseInput({ addUser, updatUser }) {
           e.preventDefault()
           if (text.trim() === "") {
             alert("please input some thing")
+          }
+          if (update.edit) {
+            updatUser(update.user.id, text, email)
+            setText("")
+            setEmail("")
           } else {
             addUser(text, email)
-            // setUserList([
-            //   ...userList,
-            //   {
-            //     text,
-            //     email,
-            //     id: uid(),
-            //   },
-            // ])
-
             setText("")
             setEmail("")
           }
@@ -52,7 +54,15 @@ function UseInput({ addUser, updatUser }) {
         </div>
 
         <button type="submit">submit</button>
-        <button type="reset">reset</button>
+        <button
+          onClick={() => {
+            setText("")
+            setEmail("")
+          }}
+          type="reset"
+        >
+          reset
+        </button>
       </form>
     </div>
   )
